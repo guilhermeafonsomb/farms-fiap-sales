@@ -18,6 +18,7 @@ export default defineConfig({
         "postcss",
         "autoprefixer",
         "react-router-dom",
+        "@tanstack/react-query",
       ],
     }),
   ],
