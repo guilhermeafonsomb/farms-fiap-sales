@@ -19,6 +19,7 @@ export default defineConfig({
         "autoprefixer",
         "react-router-dom",
         "@tanstack/react-query",
+        "react-toastify",
       ],
     }),
   ],

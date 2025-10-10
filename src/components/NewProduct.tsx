@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { Product } from "../model/product";
 import { Button } from "./Button";
 import { Input } from "./Input";
+import { toast } from "react-toastify";
 
 type NewProductProps = {
   onAdd: (product: Product) => void;
@@ -14,8 +15,12 @@ export const NewProduct = ({ onAdd }: NewProductProps) => {
 
   const handleAdd = () => {
     if (!name || !quantity || !type) {
+<<<<<<< Updated upstream
       // Alert.alert("Erro", "Preencha todos os campos");
       alert("Erro: Preencha todos os campos");
+=======
+      toast.error("Erro: Preencha todos os campos");
+>>>>>>> Stashed changes
       return;
     }
     onAdd({ name, quantity: Number(quantity), type });
@@ -26,7 +31,7 @@ export const NewProduct = ({ onAdd }: NewProductProps) => {
 
   return (
     <section className="mb-10 max-w-md flex flex-col">
-      <p className="text-lg font-semibold mb-3">Novo Produto</p>
+      <p className="text-lg text-black font-semibold mb-3">Novo Produto</p>
       <Input
         placeholder="Nome do Produto"
         value={name}
