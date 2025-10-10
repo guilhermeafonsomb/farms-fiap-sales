@@ -15,12 +15,7 @@ export const NewProduct = ({ onAdd }: NewProductProps) => {
 
   const handleAdd = () => {
     if (!name || !quantity || !type) {
-<<<<<<< Updated upstream
-      // Alert.alert("Erro", "Preencha todos os campos");
-      alert("Erro: Preencha todos os campos");
-=======
       toast.error("Erro: Preencha todos os campos");
->>>>>>> Stashed changes
       return;
     }
     onAdd({ name, quantity: Number(quantity), type });

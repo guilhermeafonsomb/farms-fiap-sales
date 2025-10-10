@@ -13,12 +13,7 @@ export const UpdateStock = ({ onUpdate }: UpdateStockProps) => {
 
   const handleUpdate = () => {
     if (!name || !delta) {
-<<<<<<< Updated upstream
-      // Alert.alert("Erro", "Preencha todos os campos");
-      alert("Erro: Preencha todos os campos");
-=======
       toast.error("Erro: Preencha todos os campos");
->>>>>>> Stashed changes
       return;
     }
     onUpdate(name, Number(delta));

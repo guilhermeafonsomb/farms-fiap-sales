@@ -26,14 +26,8 @@ export const RegisterSale: React.FC<RegisterSaleProps> = ({ onRegister }) => {
   const [goals, setGoals] = useState(0);
 
   const handleRegister = () => {
-<<<<<<< Updated upstream
-    if (!product || !quantity || !price || !period) {
-      // Alert.alert("Erro", "Preencha todos os campos");
-      alert("Erro: Preencha todos os campos");
-=======
     if (!product || !quantity || !price || !period || !goals || goals === 0) {
       toast.error("Erro: Preencha todos os campos");
->>>>>>> Stashed changes
       return;
     }
     onRegister({
