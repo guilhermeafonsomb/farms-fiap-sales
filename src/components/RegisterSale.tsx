@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { Button } from "./Button";
 import { Input } from "./Input";
+import { toast } from "react-toastify";
 
 export type Sale = {
   product: string;
   quantity: number;
   price: number;
   period: "Semanal" | "Mensal" | "Anual";
+  goals: number;
 };
 
 type RegisterSaleProps = {
@@ -21,10 +23,11 @@ export const RegisterSale: React.FC<RegisterSaleProps> = ({ onRegister }) => {
     "Semanal"
   );
 
+  const [goals, setGoals] = useState(0);
+
   const handleRegister = () => {
-    if (!product || !quantity || !price || !period) {
-      // Alert.alert("Erro", "Preencha todos os campos");
-      alert("Erro: Preencha todos os campos");
+    if (!product || !quantity || !price || !period || !goals || goals === 0) {
+      toast.error("Erro: Preencha todos os campos");
       return;
     }
     onRegister({
@@ -32,16 +35,18 @@ export const RegisterSale: React.FC<RegisterSaleProps> = ({ onRegister }) => {
       quantity: Number(quantity),
       price: Number(price),
       period,
+      goals,
     });
     setProduct("");
     setQuantity("");
     setPrice("");
     setPeriod("Semanal");
+    setGoals(0);
   };
 
   return (
     <section className="mb-10 max-w-md flex flex-col">
-      <p className="text-lg font-semibold mb-3">Registrar Venda</p>
+      <p className="text-lg text-black font-semibold mb-3">Registrar Venda</p>
       <Input
         placeholder="Produto"
         value={product}
@@ -70,6 +75,12 @@ export const RegisterSale: React.FC<RegisterSaleProps> = ({ onRegister }) => {
         <option label="Mensal" value="Mensal" />
         <option label="Anual" value="Anual" />
       </select>
+      <Input
+        className="rounded-lg p-3 mb-3 bg-primary-100 green-50"
+        placeholder="Meta"
+        type="numeric"
+        onChange={(e) => setGoals(Number(e.target.value))}
+      />
       <Button onClick={handleRegister}>Registrar Venda</Button>
     </section>
   );

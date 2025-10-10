@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "./Button";
 import { Input } from "./Input";
+import { toast } from "react-toastify";
 
 type UpdateStockProps = {
   onUpdate: (name: string, delta: number) => void;
@@ -12,8 +13,7 @@ export const UpdateStock = ({ onUpdate }: UpdateStockProps) => {
 
   const handleUpdate = () => {
     if (!name || !delta) {
-      // Alert.alert("Erro", "Preencha todos os campos");
-      alert("Erro: Preencha todos os campos");
+      toast.error("Erro: Preencha todos os campos");
       return;
     }
     onUpdate(name, Number(delta));
@@ -23,7 +23,7 @@ export const UpdateStock = ({ onUpdate }: UpdateStockProps) => {
 
   return (
     <section className="mb-10 max-w-md flex flex-col">
-      <p className="text-lg font-semibold mb-3">Atualizar Estoque</p>
+      <p className="text-lg text-black font-semibold mb-3">Atualizar Estoque</p>
       <Input
         placeholder="Produto"
         value={name}

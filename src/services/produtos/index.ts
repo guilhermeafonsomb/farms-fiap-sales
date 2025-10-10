@@ -122,11 +122,13 @@ export async function addSoldProduct({
   quantity,
   price,
   period,
+  goals,
 }: {
   productName: string;
   quantity: number;
   price: number;
   period: "Semanal" | "Mensal" | "Anual";
+  goals: number;
 }) {
   const { rows } = await tablesDB.listRows<ProdutoSale>({
     databaseId: DATABASE_ID,
@@ -137,7 +139,6 @@ export async function addSoldProduct({
   const lucro = quantity * price;
 
   if (rows.length === 0) {
-    // Produto ainda não tem registro na tabela de produtos por período
     await tablesDB.createRow({
       databaseId: DATABASE_ID,
       tableId: COLLECTION_ID_PRODUTOS,
@@ -147,6 +148,7 @@ export async function addSoldProduct({
         vendas: quantity,
         lucro,
         period,
+        goals,
       },
     });
   } else {
