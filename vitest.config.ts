@@ -21,9 +21,8 @@ export default defineConfig({
       exclude: [
         "src/test/**",
         "src/**/*.d.ts",
-        "src/**/test-utils.tsx",
+        "src/test/**",
         "node_modules/",
-        "e2e/",
         "src/lib/**",
         "App.tsx",
         "main.tsx",
