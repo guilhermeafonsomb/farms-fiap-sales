@@ -1,11 +1,11 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { NewProduct } from "../../components/NewProduct";
-import { RegisterSale, type Sale } from "../../components/RegisterSale";
-import { UpdateStock } from "../../components/UpdateStock";
-import type { Product } from "../../model/product";
-import { useProducts } from "../../hooks/useProducts";
-import { useAddProduct } from "../../hooks/useAddProducts";
-import { addSoldProduct, updateProductQuantity } from "../../services/produtos";
+import { NewProduct } from "@/components/NewProduct";
+import { RegisterSale, type Sale } from "@/components/RegisterSale";
+import { UpdateStock } from "@/components/UpdateStock";
+import type { Product } from "@/model/product";
+import { useProducts } from "@/hooks/useProducts";
+import { useAddProduct } from "@/hooks/useAddProducts";
+import { addSoldProduct, updateProductQuantity } from "@/services/produtos";
 import { toast } from "react-toastify";
 
 export const Sales = () => {

@@ -1,5 +1,5 @@
 import { Query, type Models } from "appwrite";
-import { id, tablesDB } from "../../lib/appwrite";
+import { id, tablesDB } from "@/lib/appwrite";
 
 const DATABASE_ID = "68d021ad002fe84e49fb";
 const COLLECTION_ID_PRODUTOS = "produtos";

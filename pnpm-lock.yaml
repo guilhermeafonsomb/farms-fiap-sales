@@ -16,7 +16,7 @@ importers:
         version: 5.90.2(react@19.1.1)
       '@vitejs/plugin-react':
         specifier: ^5.0.3
-        version: 5.0.3(vite@7.1.5(jiti@1.21.7)(yaml@2.8.1))
+        version: 5.0.3(vite@7.1.5(@types/node@25.0.6)(jiti@1.21.7)(yaml@2.8.1))
       appwrite:
         specifier: ^20.1.0
         version: 20.1.0
@@ -39,6 +39,9 @@ importers:
       '@tanstack/eslint-plugin-query':
         specifier: ^5.90.1
         version: 5.90.1(eslint@9.35.0(jiti@1.21.7))(typescript@5.8.3)
+      '@types/node':
+        specifier: ^25.0.6
+        version: 25.0.6
       '@types/react':
         specifier: ^19.1.10
         version: 19.1.13
@@ -50,7 +53,7 @@ importers:
         version: 5.3.3
       '@vitejs/plugin-react-swc':
         specifier: ^4.0.0
-        version: 4.1.0(vite@7.1.5(jiti@1.21.7)(yaml@2.8.1))
+        version: 4.1.0(vite@7.1.5(@types/node@25.0.6)(jiti@1.21.7)(yaml@2.8.1))
       autoprefixer:
         specifier: ^10.4.21
         version: 10.4.21(postcss@8.5.6)
@@ -80,7 +83,7 @@ importers:
         version: 8.44.0(eslint@9.35.0(jiti@1.21.7))(typescript@5.8.3)
       vite:
         specifier: ^7.1.2
-        version: 7.1.5(jiti@1.21.7)(yaml@2.8.1)
+        version: 7.1.5(@types/node@25.0.6)(jiti@1.21.7)(yaml@2.8.1)
 
 packages:
 
@@ -637,6 +640,9 @@ packages:
 
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
+
+  '@types/node@25.0.6':
+    resolution: {integrity: sha512-NNu0sjyNxpoiW3YuVFfNz7mxSQ+S4X2G28uqg2s+CzoqoQjLPsWSbsFFyztIAqt2vb8kfEAsJNepMGPTxFDx3Q==}
 
   '@types/react-dom@19.1.9':
     resolution: {integrity: sha512-qXRuZaOsAdXKFyOhRBg6Lqqc0yay13vN7KrIg4L7N4aaHN68ma9OK3NE1BoDFgFOTfM7zg+3/8+2n8rLUH3OKQ==}
@@ -1487,6 +1493,9 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
+  undici-types@7.16.0:
+    resolution: {integrity: sha512-Zz+aZWSj8LE6zoxD+xrjh4VfkIG8Ya6LvYkZqtUQGJPZjYl53ypCaUwWqo7eI0x66KBGeRo+mlBEkMSeSZ38Nw==}
+
   update-browserslist-db@1.1.3:
     resolution: {integrity: sha512-UxhIZQ+QInVdunkDAaiazvvT/+fXL5Osr0JZlJulepYu6Jd7qJtDZjlur0emRlT71EN3ScPoE7gvsuIKKNavKw==}
     hasBin: true
@@ -2024,6 +2033,10 @@ snapshots:
 
   '@types/json-schema@7.0.15': {}
 
+  '@types/node@25.0.6':
+    dependencies:
+      undici-types: 7.16.0
+
   '@types/react-dom@19.1.9(@types/react@19.1.13)':
     dependencies:
       '@types/react': 19.1.13
@@ -2136,15 +2149,15 @@ snapshots:
       '@typescript-eslint/types': 8.44.0
       eslint-visitor-keys: 4.2.1
 
-  '@vitejs/plugin-react-swc@4.1.0(vite@7.1.5(jiti@1.21.7)(yaml@2.8.1))':
+  '@vitejs/plugin-react-swc@4.1.0(vite@7.1.5(@types/node@25.0.6)(jiti@1.21.7)(yaml@2.8.1))':
     dependencies:
       '@rolldown/pluginutils': 1.0.0-beta.35
       '@swc/core': 1.13.5
-      vite: 7.1.5(jiti@1.21.7)(yaml@2.8.1)
+      vite: 7.1.5(@types/node@25.0.6)(jiti@1.21.7)(yaml@2.8.1)
     transitivePeerDependencies:
       - '@swc/helpers'
 
-  '@vitejs/plugin-react@5.0.3(vite@7.1.5(jiti@1.21.7)(yaml@2.8.1))':
+  '@vitejs/plugin-react@5.0.3(vite@7.1.5(@types/node@25.0.6)(jiti@1.21.7)(yaml@2.8.1))':
     dependencies:
       '@babel/core': 7.28.4
       '@babel/plugin-transform-react-jsx-self': 7.27.1(@babel/core@7.28.4)
@@ -2152,7 +2165,7 @@ snapshots:
       '@rolldown/pluginutils': 1.0.0-beta.35
       '@types/babel__core': 7.20.5
       react-refresh: 0.17.0
-      vite: 7.1.5(jiti@1.21.7)(yaml@2.8.1)
+      vite: 7.1.5(@types/node@25.0.6)(jiti@1.21.7)(yaml@2.8.1)
     transitivePeerDependencies:
       - supports-color
 
@@ -2906,6 +2919,8 @@ snapshots:
 
   typescript@5.8.3: {}
 
+  undici-types@7.16.0: {}
+
   update-browserslist-db@1.1.3(browserslist@4.26.2):
     dependencies:
       browserslist: 4.26.2
@@ -2918,7 +2933,7 @@ snapshots:
 
   util-deprecate@1.0.2: {}
 
-  vite@7.1.5(jiti@1.21.7)(yaml@2.8.1):
+  vite@7.1.5(@types/node@25.0.6)(jiti@1.21.7)(yaml@2.8.1):
     dependencies:
       esbuild: 0.25.9
       fdir: 6.5.0(picomatch@4.0.3)
@@ -2927,6 +2942,7 @@ snapshots:
       rollup: 4.50.2
       tinyglobby: 0.2.15
     optionalDependencies:
+      '@types/node': 25.0.6
       fsevents: 2.3.3
       jiti: 1.21.7
       yaml: 2.8.1
