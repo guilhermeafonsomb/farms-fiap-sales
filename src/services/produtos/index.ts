@@ -1,9 +1,11 @@
 import { Query, type Models } from "appwrite";
-import { id, tablesDB } from "@/lib/appwrite";
-
-const DATABASE_ID = "68d021ad002fe84e49fb";
-const COLLECTION_ID_PRODUTOS = "produtos";
-const COLLECTION_ID_ESTOQUE = "estoque";
+import {
+  COLLECTION_ID_ESTOQUE,
+  COLLECTION_ID_PRODUTOS,
+  DATABASE_ID,
+  id,
+  tablesDB,
+} from "@/lib/appwrite";
 
 export type Produto = Models.Row & {
   rowId: string;
@@ -50,15 +52,20 @@ export async function fetchProducts() {
 export const fetchProductsByPeriod = async (
   period: "Semanal" | "Mensal" | "Anual"
 ): Promise<ProdutoByPeriod[]> => {
-  const response = await tablesDB.listRows<ProdutoByPeriod>({
-    databaseId: DATABASE_ID,
-    tableId: COLLECTION_ID_PRODUTOS,
-    queries: [Query.equal("periodo", period)],
-  });
-  return response.rows;
+  try {
+    const response = await tablesDB.listRows<ProdutoByPeriod>({
+      databaseId: DATABASE_ID,
+      tableId: COLLECTION_ID_PRODUTOS,
+      queries: [Query.equal("periodo", period)],
+    });
+    return response.rows;
+  } catch (error) {
+    console.error("Erro ao buscar produtos por periodo:", error);
+    throw error;
+  }
 };
 
-export const addProduto = async ({
+export const addProduct = async ({
   name,
   quantity,
   type,
@@ -89,7 +96,6 @@ export const updateProductQuantity = async ({
   newQuantity: number;
 }) => {
   try {
-    // Busca o product pelo nome
     const response = await tablesDB.listRows<Produto>({
       databaseId: DATABASE_ID,
       tableId: COLLECTION_ID_ESTOQUE,
@@ -102,7 +108,6 @@ export const updateProductQuantity = async ({
       throw new Error("Produto não encontrado.");
     }
 
-    // Atualiza a quantidade usando o $id do produto encontrado
     const updateResponse = await tablesDB.updateRow({
       databaseId: DATABASE_ID,
       tableId: COLLECTION_ID_ESTOQUE,
@@ -130,40 +135,48 @@ export async function addSoldProduct({
   period: "Semanal" | "Mensal" | "Anual";
   goals: number;
 }) {
-  const { rows } = await tablesDB.listRows<ProdutoSale>({
-    databaseId: DATABASE_ID,
-    tableId: COLLECTION_ID_PRODUTOS,
-    queries: [Query.equal("nome", productName), Query.equal("periodo", period)],
-  });
-
-  const lucro = quantity * price;
-
-  if (rows.length === 0) {
-    await tablesDB.createRow({
+  try {
+    const { rows } = await tablesDB.listRows<ProdutoSale>({
       databaseId: DATABASE_ID,
       tableId: COLLECTION_ID_PRODUTOS,
-      rowId: id.unique(),
-      data: {
-        nome: productName,
-        vendas: quantity,
-        lucro,
-        period,
-        goals,
-      },
+      queries: [
+        Query.equal("nome", productName),
+        Query.equal("periodo", period),
+      ],
     });
-  } else {
-    const product = rows[0];
-    const novasVendas = (product.vendas ?? 0) + quantity;
-    const novoLucro = (product.lucro ?? 0) + lucro;
 
-    await tablesDB.updateRow({
-      databaseId: DATABASE_ID,
-      tableId: COLLECTION_ID_PRODUTOS,
-      rowId: product.$id,
-      data: {
-        vendas: novasVendas,
-        lucro: novoLucro,
-      },
-    });
+    const lucro = quantity * price;
+
+    if (rows.length === 0) {
+      await tablesDB.createRow({
+        databaseId: DATABASE_ID,
+        tableId: COLLECTION_ID_PRODUTOS,
+        rowId: id.unique(),
+        data: {
+          nome: productName,
+          vendas: quantity,
+          lucro,
+          period,
+          goals,
+        },
+      });
+    } else {
+      const product = rows[0];
+      const novasVendas = (product.vendas ?? 0) + quantity;
+      const novoLucro = (product.lucro ?? 0) + lucro;
+
+      await tablesDB.updateRow({
+        databaseId: DATABASE_ID,
+        tableId: COLLECTION_ID_PRODUTOS,
+        rowId: product.$id,
+        data: {
+          vendas: novasVendas,
+          lucro: novoLucro,
+        },
+      });
+    }
+  } catch (error) {
+    console.error("Erro ao adicionar produto vendido:", error);
+    throw error;
   }
 }
