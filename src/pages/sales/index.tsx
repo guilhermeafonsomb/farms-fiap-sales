@@ -1,5 +1,4 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { RegisterSale, type Sale } from "@/components/RegisterSale";
 import { UpdateStock } from "@/components/UpdateStock";
 import type { Product } from "@/model/product";
 import { useProducts } from "@/hooks/useProducts";
@@ -7,6 +6,7 @@ import { useAddProduct } from "@/hooks/useAddProducts";
 import { addSoldProduct, updateProductQuantity } from "@/services/produtos";
 import { toast } from "react-toastify";
 import { NewProduct } from "@/components/newProduct";
+import { RegisterSale, type Sale } from "@/components/registerSale";
 
 export const Sales = () => {
   const queryClient = useQueryClient();
