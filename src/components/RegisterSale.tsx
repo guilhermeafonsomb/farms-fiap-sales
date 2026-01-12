@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Button } from "./button/Button";
-import { Input } from "./Input";
+import { Button } from "./button";
+import { Input } from "./input";
 import { toast } from "react-toastify";
 
 export type Sale = {

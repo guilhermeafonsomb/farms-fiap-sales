@@ -1,5 +1,5 @@
 import { render } from "@/test/test-utils";
-import { Button } from "./Button";
+import { Button } from ".";
 
 describe("Button tests", () => {
   test("should render the component", () => {
