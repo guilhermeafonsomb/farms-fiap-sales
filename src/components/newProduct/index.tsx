@@ -1,8 +1,8 @@
 import { useState } from "react";
-import type { Product } from "../model/product";
-import { Button } from "./Button";
-import { Input } from "./Input";
 import { toast } from "react-toastify";
+import type { Product } from "@/model/product";
+import { Input } from "../input";
+import { Button } from "../button";
 
 type NewProductProps = {
   onAdd: (product: Product) => void;

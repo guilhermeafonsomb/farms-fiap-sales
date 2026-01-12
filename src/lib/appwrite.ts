@@ -1,5 +1,9 @@
 import { Account, Client, Databases, ID, TablesDB } from "appwrite";
 
+export const DATABASE_ID = "68d021ad002fe84e49fb";
+export const COLLECTION_ID_PRODUCTS = "produtos";
+export const COLLECTION_ID_STOCK = "estoque";
+
 const client = new Client();
 
 client

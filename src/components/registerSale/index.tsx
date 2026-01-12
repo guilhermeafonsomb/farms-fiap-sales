@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Button } from "./Button";
-import { Input } from "./Input";
+import { Button } from "../button";
+import { Input } from "../input";
 import { toast } from "react-toastify";
 
 export type Sale = {
@@ -67,6 +67,7 @@ export const RegisterSale: React.FC<RegisterSaleProps> = ({ onRegister }) => {
       <select
         className="rounded-lg p-3 mb-3 bg-primary-100 text-black"
         value={period}
+        data-testid="period-select"
         onChange={(value) =>
           setPeriod(value.target.value as "Semanal" | "Mensal" | "Anual")
         }
