@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Button } from "./button";
-import { Input } from "./input";
+import { Button } from "../button";
+import { Input } from "../input";
 import { toast } from "react-toastify";
 
 type UpdateStockProps = {
