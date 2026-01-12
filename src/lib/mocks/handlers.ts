@@ -1,8 +1,8 @@
 import { http, HttpResponse } from "msw";
 import {
+  COLLECTION_ID_PRODUCTS,
+  COLLECTION_ID_STOCK,
   DATABASE_ID,
-  COLLECTION_ID_PRODUTOS,
-  COLLECTION_ID_ESTOQUE,
 } from "../appwrite";
 
 const mockStockProducts = [
@@ -75,7 +75,7 @@ interface QueryParam {
 
 export const handlers = [
   http.get(
-    `https://nyc.cloud.appwrite.io/v1/tablesdb/${DATABASE_ID}/tables/${COLLECTION_ID_ESTOQUE}/rows`,
+    `https://nyc.cloud.appwrite.io/v1/tablesdb/${DATABASE_ID}/tables/${COLLECTION_ID_STOCK}/rows`,
     ({ request }) => {
       const url = new URL(request.url);
       const queries = url.searchParams.get("queries");
@@ -99,7 +99,7 @@ export const handlers = [
   ),
 
   http.get(
-    `https://nyc.cloud.appwrite.io/v1/tablesdb/${DATABASE_ID}/tables/${COLLECTION_ID_PRODUTOS}/rows`,
+    `https://nyc.cloud.appwrite.io/v1/tablesdb/${DATABASE_ID}/tables/${COLLECTION_ID_PRODUCTS}/rows`,
     ({ request }) => {
       const url = new URL(request.url);
       const queries = url.searchParams.get("queries");
@@ -131,7 +131,7 @@ export const handlers = [
   ),
 
   http.post(
-    `https://nyc.cloud.appwrite.io/v1/tablesdb/${DATABASE_ID}/tables/${COLLECTION_ID_ESTOQUE}/rows`,
+    `https://nyc.cloud.appwrite.io/v1/tablesdb/${DATABASE_ID}/tables/${COLLECTION_ID_STOCK}/rows`,
     async ({ request }) => {
       const body = (await request.json()) as {
         data: Record<string, unknown>;
@@ -145,7 +145,7 @@ export const handlers = [
   ),
 
   http.patch(
-    `https://nyc.cloud.appwrite.io/v1/tablesdb/${DATABASE_ID}/tables/${COLLECTION_ID_ESTOQUE}/rows/:rowId`,
+    `https://nyc.cloud.appwrite.io/v1/tablesdb/${DATABASE_ID}/tables/${COLLECTION_ID_STOCK}/rows/:rowId`,
     async ({ request, params }) => {
       const body = (await request.json()) as {
         data: Record<string, unknown>;
@@ -160,7 +160,7 @@ export const handlers = [
   ),
 
   http.post(
-    `https://nyc.cloud.appwrite.io/v1/tablesdb/${DATABASE_ID}/tables/${COLLECTION_ID_PRODUTOS}/rows`,
+    `https://nyc.cloud.appwrite.io/v1/tablesdb/${DATABASE_ID}/tables/${COLLECTION_ID_PRODUCTS}/rows`,
     async ({ request }) => {
       const body = (await request.json()) as {
         data: Record<string, unknown>;
@@ -174,7 +174,7 @@ export const handlers = [
   ),
 
   http.patch(
-    `https://nyc.cloud.appwrite.io/v1/tablesdb/${DATABASE_ID}/tables/${COLLECTION_ID_PRODUTOS}/rows/:rowId`,
+    `https://nyc.cloud.appwrite.io/v1/tablesdb/${DATABASE_ID}/tables/${COLLECTION_ID_PRODUCTS}/rows/:rowId`,
     async ({ request, params }) => {
       const body = (await request.json()) as {
         data: Record<string, unknown>;

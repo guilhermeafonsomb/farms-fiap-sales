@@ -20,13 +20,11 @@ describe("Service product tests", () => {
   it("should return error when fetching products fails", async () => {
     const { server } = await import("@/lib/mocks/server");
     const { http, HttpResponse } = await import("msw");
-    const { DATABASE_ID, COLLECTION_ID_ESTOQUE } = await import(
-      "@/lib/appwrite"
-    );
+    const { DATABASE_ID, COLLECTION_ID_STOCK } = await import("@/lib/appwrite");
 
     server.use(
       http.get(
-        `https://nyc.cloud.appwrite.io/v1/tablesdb/${DATABASE_ID}/tables/${COLLECTION_ID_ESTOQUE}/rows`,
+        `https://nyc.cloud.appwrite.io/v1/tablesdb/${DATABASE_ID}/tables/${COLLECTION_ID_STOCK}/rows`,
         () => {
           return HttpResponse.json(
             { message: "Internal Server Error" },
@@ -49,13 +47,13 @@ describe("Service product tests", () => {
   it("should return error when fetching products by period fails", async () => {
     const { server } = await import("@/lib/mocks/server");
     const { http, HttpResponse } = await import("msw");
-    const { DATABASE_ID, COLLECTION_ID_PRODUTOS } = await import(
+    const { DATABASE_ID, COLLECTION_ID_PRODUCTS } = await import(
       "@/lib/appwrite"
     );
 
     server.use(
       http.get(
-        `https://nyc.cloud.appwrite.io/v1/tablesdb/${DATABASE_ID}/tables/${COLLECTION_ID_PRODUTOS}/rows`,
+        `https://nyc.cloud.appwrite.io/v1/tablesdb/${DATABASE_ID}/tables/${COLLECTION_ID_PRODUCTS}/rows`,
         () => {
           return HttpResponse.json(
             { message: "Internal Server Error" },
@@ -78,13 +76,11 @@ describe("Service product tests", () => {
   it("should return error when adding a product fails", async () => {
     const { server } = await import("@/lib/mocks/server");
     const { http, HttpResponse } = await import("msw");
-    const { DATABASE_ID, COLLECTION_ID_ESTOQUE } = await import(
-      "@/lib/appwrite"
-    );
+    const { DATABASE_ID, COLLECTION_ID_STOCK } = await import("@/lib/appwrite");
 
     server.use(
       http.post(
-        `https://nyc.cloud.appwrite.io/v1/tablesdb/${DATABASE_ID}/tables/${COLLECTION_ID_ESTOQUE}/rows`,
+        `https://nyc.cloud.appwrite.io/v1/tablesdb/${DATABASE_ID}/tables/${COLLECTION_ID_STOCK}/rows`,
         () => {
           return HttpResponse.json(
             { message: "Internal Server Error" },
@@ -110,13 +106,11 @@ describe("Service product tests", () => {
   it("should return error when updating a product fails", async () => {
     const { server } = await import("@/lib/mocks/server");
     const { http, HttpResponse } = await import("msw");
-    const { DATABASE_ID, COLLECTION_ID_ESTOQUE } = await import(
-      "@/lib/appwrite"
-    );
+    const { DATABASE_ID, COLLECTION_ID_STOCK } = await import("@/lib/appwrite");
 
     server.use(
       http.patch(
-        `https://nyc.cloud.appwrite.io/v1/tablesdb/${DATABASE_ID}/tables/${COLLECTION_ID_ESTOQUE}/rows/:rowId`,
+        `https://nyc.cloud.appwrite.io/v1/tablesdb/${DATABASE_ID}/tables/${COLLECTION_ID_STOCK}/rows/:rowId`,
         () => {
           return HttpResponse.json(
             { message: "Internal Server Error" },
@@ -134,13 +128,11 @@ describe("Service product tests", () => {
   it("should throw error when product is not found during update", async () => {
     const { server } = await import("@/lib/mocks/server");
     const { http, HttpResponse } = await import("msw");
-    const { DATABASE_ID, COLLECTION_ID_ESTOQUE } = await import(
-      "@/lib/appwrite"
-    );
+    const { DATABASE_ID, COLLECTION_ID_STOCK } = await import("@/lib/appwrite");
 
     server.use(
       http.get(
-        `https://nyc.cloud.appwrite.io/v1/tablesdb/${DATABASE_ID}/tables/${COLLECTION_ID_ESTOQUE}/rows`,
+        `https://nyc.cloud.appwrite.io/v1/tablesdb/${DATABASE_ID}/tables/${COLLECTION_ID_STOCK}/rows`,
         () => {
           return HttpResponse.json({
             rows: [],
@@ -173,13 +165,13 @@ describe("Service product tests", () => {
   it("should throw error when add sold product fails", async () => {
     const { server } = await import("@/lib/mocks/server");
     const { http, HttpResponse } = await import("msw");
-    const { DATABASE_ID, COLLECTION_ID_PRODUTOS } = await import(
+    const { DATABASE_ID, COLLECTION_ID_PRODUCTS } = await import(
       "@/lib/appwrite"
     );
 
     server.use(
       http.get(
-        `https://nyc.cloud.appwrite.io/v1/tablesdb/${DATABASE_ID}/tables/${COLLECTION_ID_PRODUTOS}/rows`,
+        `https://nyc.cloud.appwrite.io/v1/tablesdb/${DATABASE_ID}/tables/${COLLECTION_ID_PRODUCTS}/rows`,
         () => {
           return HttpResponse.json({
             rows: [],
@@ -187,9 +179,8 @@ describe("Service product tests", () => {
           });
         }
       ),
-      // Mock POST para retornar erro
       http.post(
-        `https://nyc.cloud.appwrite.io/v1/tablesdb/${DATABASE_ID}/tables/${COLLECTION_ID_PRODUTOS}/rows`,
+        `https://nyc.cloud.appwrite.io/v1/tablesdb/${DATABASE_ID}/tables/${COLLECTION_ID_PRODUCTS}/rows`,
         () => {
           return HttpResponse.json(
             { message: "Internal Server Error" },

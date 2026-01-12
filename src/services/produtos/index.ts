@@ -1,7 +1,7 @@
 import { Query, type Models } from "appwrite";
 import {
-  COLLECTION_ID_ESTOQUE,
-  COLLECTION_ID_PRODUTOS,
+  COLLECTION_ID_STOCK,
+  COLLECTION_ID_PRODUCTS,
   DATABASE_ID,
   id,
   tablesDB,
@@ -34,7 +34,7 @@ export async function fetchProducts() {
   try {
     const response = await tablesDB.listRows<Produto>({
       databaseId: DATABASE_ID,
-      tableId: COLLECTION_ID_ESTOQUE,
+      tableId: COLLECTION_ID_STOCK,
     });
 
     return response.rows.map((doc) => ({
@@ -55,7 +55,7 @@ export const fetchProductsByPeriod = async (
   try {
     const response = await tablesDB.listRows<ProdutoByPeriod>({
       databaseId: DATABASE_ID,
-      tableId: COLLECTION_ID_PRODUTOS,
+      tableId: COLLECTION_ID_PRODUCTS,
       queries: [Query.equal("periodo", period)],
     });
     return response.rows;
@@ -77,7 +77,7 @@ export const addProduct = async ({
   try {
     const response = await tablesDB.createRow({
       databaseId: DATABASE_ID,
-      tableId: COLLECTION_ID_ESTOQUE,
+      tableId: COLLECTION_ID_STOCK,
       rowId: id.unique(),
       data: { nome: name, quantidade: quantity, categoria: type },
     });
@@ -98,7 +98,7 @@ export const updateProductQuantity = async ({
   try {
     const response = await tablesDB.listRows<Produto>({
       databaseId: DATABASE_ID,
-      tableId: COLLECTION_ID_ESTOQUE,
+      tableId: COLLECTION_ID_STOCK,
       queries: [Query.equal("nome", productName)],
     });
 
@@ -110,7 +110,7 @@ export const updateProductQuantity = async ({
 
     const updateResponse = await tablesDB.updateRow({
       databaseId: DATABASE_ID,
-      tableId: COLLECTION_ID_ESTOQUE,
+      tableId: COLLECTION_ID_STOCK,
       rowId: product.$id,
       data: { quantidade: newQuantity },
     });
@@ -138,7 +138,7 @@ export async function addSoldProduct({
   try {
     const { rows } = await tablesDB.listRows<ProdutoSale>({
       databaseId: DATABASE_ID,
-      tableId: COLLECTION_ID_PRODUTOS,
+      tableId: COLLECTION_ID_PRODUCTS,
       queries: [
         Query.equal("nome", productName),
         Query.equal("periodo", period),
@@ -150,7 +150,7 @@ export async function addSoldProduct({
     if (rows.length === 0) {
       await tablesDB.createRow({
         databaseId: DATABASE_ID,
-        tableId: COLLECTION_ID_PRODUTOS,
+        tableId: COLLECTION_ID_PRODUCTS,
         rowId: id.unique(),
         data: {
           nome: productName,
@@ -167,7 +167,7 @@ export async function addSoldProduct({
 
       await tablesDB.updateRow({
         databaseId: DATABASE_ID,
-        tableId: COLLECTION_ID_PRODUTOS,
+        tableId: COLLECTION_ID_PRODUCTS,
         rowId: product.$id,
         data: {
           vendas: novasVendas,
