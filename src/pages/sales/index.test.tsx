@@ -3,12 +3,12 @@ import { render, fireEvent, waitFor } from "@/test/test-utils";
 import { Sales } from ".";
 import * as useProductsHook from "@/hooks/useProducts";
 import * as useAddProductHook from "@/hooks/useAddProducts";
-import * as produtosService from "@/services/produtos";
+import * as produtosService from "@/services/products";
 import { QueryClient } from "@tanstack/react-query";
 
 vi.mock("@/hooks/useProducts");
 vi.mock("@/hooks/useAddProducts");
-vi.mock("@/services/produtos");
+vi.mock("@/services/products");
 vi.mock("react-toastify", async (importOriginal) => {
   const actual = await importOriginal<typeof import("react-toastify")>();
   return {

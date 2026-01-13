@@ -7,14 +7,14 @@ import {
   tablesDB,
 } from "@/lib/appwrite";
 
-export type Produto = Models.Row & {
+export type Product = Models.Row & {
   rowId: string;
   nome: string;
   quantidade: number;
   categoria: string;
 };
 
-export type ProdutoSale = Models.Row & {
+export type ProductSale = Models.Row & {
   rowId: string;
   nome: string;
   quantidade: number;
@@ -23,7 +23,7 @@ export type ProdutoSale = Models.Row & {
   vendas: number;
 };
 
-export type ProdutoByPeriod = Models.Row & {
+export type ProductByPeriod = Models.Row & {
   nome: string;
   lucro: number;
   vendas: number;
@@ -32,7 +32,7 @@ export type ProdutoByPeriod = Models.Row & {
 
 export async function fetchProducts() {
   try {
-    const response = await tablesDB.listRows<Produto>({
+    const response = await tablesDB.listRows<Product>({
       databaseId: DATABASE_ID,
       tableId: COLLECTION_ID_STOCK,
     });
@@ -51,9 +51,9 @@ export async function fetchProducts() {
 
 export const fetchProductsByPeriod = async (
   period: "Semanal" | "Mensal" | "Anual"
-): Promise<ProdutoByPeriod[]> => {
+): Promise<ProductByPeriod[]> => {
   try {
-    const response = await tablesDB.listRows<ProdutoByPeriod>({
+    const response = await tablesDB.listRows<ProductByPeriod>({
       databaseId: DATABASE_ID,
       tableId: COLLECTION_ID_PRODUCTS,
       queries: [Query.equal("periodo", period)],
@@ -96,7 +96,7 @@ export const updateProductQuantity = async ({
   newQuantity: number;
 }) => {
   try {
-    const response = await tablesDB.listRows<Produto>({
+    const response = await tablesDB.listRows<Product>({
       databaseId: DATABASE_ID,
       tableId: COLLECTION_ID_STOCK,
       queries: [Query.equal("nome", productName)],
@@ -105,7 +105,7 @@ export const updateProductQuantity = async ({
     const product = response.rows[0];
 
     if (!product) {
-      throw new Error("Produto não encontrado.");
+      throw new Error("Product não encontrado.");
     }
 
     const updateResponse = await tablesDB.updateRow({
@@ -136,7 +136,7 @@ export async function addSoldProduct({
   goals: number;
 }) {
   try {
-    const { rows } = await tablesDB.listRows<ProdutoSale>({
+    const { rows } = await tablesDB.listRows<ProductSale>({
       databaseId: DATABASE_ID,
       tableId: COLLECTION_ID_PRODUCTS,
       queries: [

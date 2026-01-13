@@ -95,7 +95,7 @@ describe("Service product tests", () => {
 
   it("should update a product", async () => {
     const product = await updateProductQuantity({
-      productName: "Produto 1",
+      productName: "Product 1",
       newQuantity: 10,
     });
 
@@ -121,7 +121,7 @@ describe("Service product tests", () => {
     );
 
     await expect(
-      updateProductQuantity({ productName: "Produto 1", newQuantity: 10 })
+      updateProductQuantity({ productName: "Product 1", newQuantity: 10 })
     ).rejects.toThrow();
   });
 
@@ -144,16 +144,16 @@ describe("Service product tests", () => {
 
     await expect(
       updateProductQuantity({
-        productName: "Produto Inexistente",
+        productName: "Product Inexistente",
         newQuantity: 10,
       })
-    ).rejects.toThrow("Produto não encontrado.");
+    ).rejects.toThrow("Product não encontrado.");
   });
 
   it("should add sold product", async () => {
     await expect(
       addSoldProduct({
-        productName: "Produto 1",
+        productName: "Product 1",
         quantity: 10,
         price: 10,
         period: "Semanal",
@@ -192,7 +192,7 @@ describe("Service product tests", () => {
 
     await expect(
       addSoldProduct({
-        productName: "Produto 1",
+        productName: "Product 1",
         quantity: 10,
         price: 10,
         period: "Semanal",
