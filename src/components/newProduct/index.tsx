@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
-import type { Product } from "@/model/product";
+import type { Product } from "@/model/products";
 import { Input } from "../input";
 import { Button } from "../button";
 

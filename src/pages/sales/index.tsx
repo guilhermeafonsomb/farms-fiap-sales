@@ -1,8 +1,8 @@
 import { useQueryClient } from "@tanstack/react-query";
-import type { Product } from "@/model/product";
+import type { Product } from "@/model/products";
 import { useProducts } from "@/hooks/useProducts";
 import { useAddProduct } from "@/hooks/useAddProducts";
-import { addSoldProduct, updateProductQuantity } from "@/services/produtos";
+import { addSoldProduct, updateProductQuantity } from "@/services/products";
 import { toast } from "react-toastify";
 import { NewProduct } from "@/components/newProduct";
 import { RegisterSale, type Sale } from "@/components/registerSale";

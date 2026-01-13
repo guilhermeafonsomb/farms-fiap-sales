@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { fetchProductsByPeriod } from "@/services/produtos";
+import { fetchProductsByPeriod } from "@/services/products";
 
 export function useProductsByPeriod(period: "Semanal" | "Mensal" | "Anual") {
   const queryClient = useQueryClient();
