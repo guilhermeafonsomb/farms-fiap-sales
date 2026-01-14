@@ -45,44 +45,81 @@ export const RegisterSale: React.FC<RegisterSaleProps> = ({ onRegister }) => {
   };
 
   return (
-    <section className="mb-10 max-w-md flex flex-col">
-      <p className="text-lg text-black font-semibold mb-3">Registrar Venda</p>
-      <Input
-        placeholder="Produto"
-        value={product}
-        onChange={(e) => setProduct(e.target.value)}
-      />
-      <Input
-        placeholder="Quantidade Vendida"
-        type="numeric"
-        value={quantity}
-        onChange={(e) => setQuantity(e.target.value)}
-      />
-      <Input
-        placeholder="Preço"
-        type="numeric"
-        value={price}
-        onChange={(e) => setPrice(e.target.value)}
-      />
-      <select
-        className="rounded-lg p-3 mb-3 bg-primary-100 text-black"
-        value={period}
-        data-testid="period-select"
-        onChange={(value) =>
-          setPeriod(value.target.value as "Semanal" | "Mensal" | "Anual")
-        }
+    <section>
+      <h2 className="text-lg text-black font-semibold mb-3">Registrar Venda</h2>
+      <form
+        className="mb-10 max-w-md flex flex-col"
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleRegister();
+        }}
       >
-        <option label="Semanal" value="Semanal" />
-        <option label="Mensal" value="Mensal" />
-        <option label="Anual" value="Anual" />
-      </select>
-      <Input
-        className="rounded-lg p-3 mb-3 bg-primary-100 green-50"
-        placeholder="Meta"
-        type="numeric"
-        onChange={(e) => setGoals(Number(e.target.value))}
-      />
-      <Button onClick={handleRegister}>Registrar Venda</Button>
+        <label htmlFor="product-name" className="sr-only">
+          Produto
+        </label>
+        <Input
+          id="product-name"
+          placeholder="Produto"
+          value={product}
+          onChange={(e) => setProduct(e.target.value)}
+          aria-required="true"
+        />
+
+        <label htmlFor="quantity" className="sr-only">
+          Quantidade Vendida
+        </label>
+        <Input
+          id="quantity"
+          placeholder="Quantidade Vendida"
+          type="numeric"
+          value={quantity}
+          onChange={(e) => setQuantity(e.target.value)}
+          aria-required="true"
+        />
+
+        <label htmlFor="price" className="sr-only">
+          Preço
+        </label>
+        <Input
+          id="price"
+          placeholder="Preço"
+          type="numeric"
+          value={price}
+          onChange={(e) => setPrice(e.target.value)}
+          aria-required="true"
+        />
+
+        <label htmlFor="period" className="sr-only">
+          Período
+        </label>
+        <select
+          id="period"
+          className="rounded-lg p-3 mb-3 bg-primary-100 text-black focus:outline-none focus:ring-2 focus:ring-primary-500"
+          value={period}
+          data-testid="period-select"
+          onChange={(value) =>
+            setPeriod(value.target.value as "Semanal" | "Mensal" | "Anual")
+          }
+          aria-required="true"
+        >
+          <option label="Semanal" value="Semanal" />
+          <option label="Mensal" value="Mensal" />
+          <option label="Anual" value="Anual" />
+        </select>
+
+        <label htmlFor="goals" className="sr-only">
+          Meta
+        </label>
+        <Input
+          id="goals"
+          className="rounded-lg p-3 mb-3 bg-primary-100 green-50"
+          placeholder="Meta"
+          type="numeric"
+          onChange={(e) => setGoals(Number(e.target.value))}
+          aria-required="true"
+        />
+        <Button type="submit">Registrar Venda</Button>
+      </form>
     </section>
   );
 };
