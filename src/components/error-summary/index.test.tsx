@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from "@/test/test-utils";
+import { render, fireEvent } from "@/test/test-utils";
 import { ErrorSummary } from "./index";
 
 describe("ErrorSummary", () => {
