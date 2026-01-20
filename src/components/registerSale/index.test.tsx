@@ -1,50 +1,121 @@
-import { fireEvent, render, vi } from "@/test/test-utils";
-import { RegisterSale } from ".";
+import { render, fireEvent } from "@/test/test-utils";
+import { RegisterSale } from "./index";
+import { vi } from "vitest";
 
-const mockOnRegister = vi.fn();
+describe("RegisterSale", () => {
+  const mockOnRegister = vi.fn();
 
-describe("RegisterSale tests", () => {
-  it("should render the component", () => {
-    const { getByRole } = render(<RegisterSale onRegister={mockOnRegister} />);
+  beforeEach(() => {
+    mockOnRegister.mockClear();
+  });
+
+  it("should render all form fields", () => {
+    const { getByLabelText, getByTestId } = render(
+      <RegisterSale onRegister={mockOnRegister} />
+    );
+
+    expect(getByLabelText(/produto/i)).toBeInTheDocument();
+    expect(getByLabelText(/quantidade vendida/i)).toBeInTheDocument();
+    expect(getByLabelText(/preço/i)).toBeInTheDocument();
+    expect(getByLabelText(/meta/i)).toBeInTheDocument();
+    expect(getByTestId("period-select")).toBeInTheDocument();
+  });
+
+  it("should show validation errors when submitting empty form", () => {
+    const { getByRole, getAllByRole, getAllByText } = render(
+      <RegisterSale onRegister={mockOnRegister} />
+    );
+
+    const submitButton = getByRole("button", {
+      name: /registrar venda/i,
+    });
+    fireEvent.click(submitButton);
+
+    expect(mockOnRegister).not.toHaveBeenCalled();
+
+    const alerts = getAllByRole("alert");
+    expect(alerts.length).toBeGreaterThan(0);
 
     expect(
-      getByRole("button", { name: "Registrar Venda" })
+      getAllByText("O campo Produto é obrigatório")[1]
     ).toBeInTheDocument();
+    expect(
+      getAllByText("O campo Quantidade é obrigatório")[1]
+    ).toBeInTheDocument();
+    expect(getAllByText("O campo Preço é obrigatório")[1]).toBeInTheDocument();
+    expect(getAllByText("O campo Meta é obrigatório")[1]).toBeInTheDocument();
   });
 
-  it("should render toast error", () => {
-    const { getByRole, getByText } = render(
+  it("should link errors to inputs using aria-describedby", () => {
+    const { getByRole, getByLabelText } = render(
       <RegisterSale onRegister={mockOnRegister} />
     );
 
-    const submitButton = getByRole("button", { name: "Registrar Venda" });
-
+    const submitButton = getByRole("button", {
+      name: /registrar venda/i,
+    });
     fireEvent.click(submitButton);
 
-    expect(getByText("Erro: Preencha todos os campos")).toBeInTheDocument();
+    const productInput = getByLabelText(/produto/i);
+    expect(productInput).toHaveAttribute("aria-invalid", "true");
+    expect(productInput).toHaveAttribute(
+      "aria-describedby",
+      "product-name-error"
+    );
+
+    const errorMsg = document.getElementById("product-name-error");
+    expect(errorMsg).toHaveTextContent("O campo Produto é obrigatório");
+    expect(errorMsg).toHaveAttribute("id", "product-name-error");
   });
 
-  it("should call onRegister", () => {
-    const { getByRole, getByPlaceholderText, getByTestId } = render(
+  it("should focus error summary when validation fails", () => {
+    const { getByRole } = render(<RegisterSale onRegister={mockOnRegister} />);
+
+    const submitButton = getByRole("button", {
+      name: /registrar venda/i,
+    });
+    fireEvent.click(submitButton);
+
+    const errorSummaryHeading = getByRole("heading", {
+      name: /encontramos 4 erros no formulário/i,
+    });
+    expect(errorSummaryHeading).toBeInTheDocument();
+    expect(document.activeElement).toBe(errorSummaryHeading);
+  });
+
+  it("should clear errors and submit when form is valid", () => {
+    const { getByLabelText, getByRole, queryByText } = render(
       <RegisterSale onRegister={mockOnRegister} />
     );
 
-    const productInput = getByPlaceholderText("Produto");
-    const quantityInput = getByPlaceholderText("Quantidade Vendida");
-    const priceInput = getByPlaceholderText("Preço");
-    const goalsInput = getByPlaceholderText("Meta");
-    const periodInput = getByTestId("period-select");
+    fireEvent.change(getByLabelText(/produto/i), {
+      target: { value: "Tomate" },
+    });
+    fireEvent.change(getByLabelText(/quantidade vendida/i), {
+      target: { value: "100" },
+    });
+    fireEvent.change(getByLabelText(/preço/i), {
+      target: { value: "5" },
+    });
+    fireEvent.change(getByLabelText(/meta/i), {
+      target: { value: "1000" },
+    });
 
-    fireEvent.change(productInput, { target: { value: "Produto" } });
-    fireEvent.change(quantityInput, { target: { value: "10" } });
-    fireEvent.change(priceInput, { target: { value: "10" } });
-    fireEvent.change(goalsInput, { target: { value: "10" } });
-    fireEvent.change(periodInput, { target: { value: "Semanal" } });
-
-    const submitButton = getByRole("button", { name: "Registrar Venda" });
-
+    const submitButton = getByRole("button", {
+      name: /registrar venda/i,
+    });
     fireEvent.click(submitButton);
 
-    expect(mockOnRegister).toHaveBeenCalled();
+    expect(mockOnRegister).toHaveBeenCalledWith({
+      product: "Tomate",
+      quantity: 100,
+      price: 5,
+      period: "Semanal",
+      goals: 1000,
+    });
+
+    expect(
+      queryByText("O campo Produto é obrigatório")
+    ).not.toBeInTheDocument();
   });
 });
