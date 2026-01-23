@@ -71,7 +71,8 @@ jobs:
           VITE_APPWRITE_ENDPOINT: ${{ secrets.VITE_APPWRITE_ENDPOINT }}
           VITE_APPWRITE_PROJECT_ID: ${{ secrets.VITE_APPWRITE_PROJECT_ID }}
           VITE_APPWRITE_DATABASE_ID: ${{ secrets.VITE_APPWRITE_DATABASE_ID }}
-          VITE_APPWRITE_TABLE_ID: ${{ secrets.VITE_APPWRITE_TABLE_ID }}
+          VITE_APPWRITE_PRODUCTS_TABLE_ID: ${{ secrets.VITE_APPWRITE_PRODUCTS_TABLE_ID }}
+          VITE_APPWRITE_STOCKS_TABLE_ID: ${{ secrets.VITE_APPWRITE_STOCKS_TABLE_ID }}
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
@@ -115,11 +116,6 @@ jobs:
 
       - name: Run Playwright tests
         run: pnpm test:e2e
-        env:
-          VITE_APPWRITE_ENDPOINT: ${{ secrets.VITE_APPWRITE_ENDPOINT }}
-          VITE_APPWRITE_PROJECT_ID: ${{ secrets.VITE_APPWRITE_PROJECT_ID }}
-          VITE_APPWRITE_DATABASE_ID: ${{ secrets.VITE_APPWRITE_DATABASE_ID }}
-          VITE_APPWRITE_TABLE_ID: ${{ secrets.VITE_APPWRITE_TABLE_ID }}
 
       - name: Upload Playwright Report
         uses: actions/upload-artifact@v4
@@ -158,11 +154,6 @@ jobs:
 
       - name: Project build
         run: pnpm build
-        env:
-          VITE_APPWRITE_ENDPOINT: ${{ secrets.VITE_APPWRITE_ENDPOINT }}
-          VITE_APPWRITE_PROJECT_ID: ${{ secrets.VITE_APPWRITE_PROJECT_ID }}
-          VITE_APPWRITE_DATABASE_ID: ${{ secrets.VITE_APPWRITE_DATABASE_ID }}
-          VITE_APPWRITE_TABLE_ID: ${{ secrets.VITE_APPWRITE_TABLE_ID }}
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
