@@ -1,66 +1,57 @@
-import { Query, type Models } from "appwrite";
+import { Query } from "appwrite";
 import {
-  COLLECTION_ID_STOCK,
-  COLLECTION_ID_PRODUCTS,
+  STOCKS_TABLE_ID,
+  PRODUCTS_TABLE_ID,
   DATABASE_ID,
   id,
   tablesDB,
 } from "@/lib/appwrite";
+import type { Product, ProductByPeriod } from "@/model/products";
 
-export type Product = Models.Row & {
-  rowId: string;
-  nome: string;
-  quantidade: number;
-  categoria: string;
-};
-
-export type ProductSale = Models.Row & {
-  rowId: string;
-  nome: string;
-  quantidade: number;
-  categoria: string;
-  lucro: number;
-  vendas: number;
-};
-
-export type ProductByPeriod = Models.Row & {
-  nome: string;
-  lucro: number;
-  vendas: number;
-  periodo: "Semanal" | "Mensal" | "Anual";
-};
-
-export async function fetchProducts() {
+export const fetchProducts = async (): Promise<Product[]> => {
   try {
-    const response = await tablesDB.listRows<Product>({
+    const response = await tablesDB.listRows({
       databaseId: DATABASE_ID,
-      tableId: COLLECTION_ID_STOCK,
+      tableId: STOCKS_TABLE_ID,
     });
 
-    return response.rows.map((doc) => ({
-      id: doc.$id,
-      name: doc.nome,
-      quantity: doc.quantidade,
-      type: doc.categoria,
-    }));
+    return response.rows as unknown as Product[];
   } catch (error) {
     console.error("Erro ao buscar produtos do estoque:", error);
     throw error;
   }
-}
+};
 
-export const fetchProductsByPeriod = async (
-  period: "Semanal" | "Mensal" | "Anual"
-): Promise<ProductByPeriod[]> => {
+export const updateProductQuantity = async ({
+  productName,
+  newQuantity,
+}: {
+  productName: string;
+  newQuantity: number;
+}) => {
   try {
-    const response = await tablesDB.listRows<ProductByPeriod>({
+    const response = await tablesDB.listRows({
       databaseId: DATABASE_ID,
-      tableId: COLLECTION_ID_PRODUCTS,
-      queries: [Query.equal("periodo", period)],
+      tableId: STOCKS_TABLE_ID,
+      queries: [Query.equal("name", productName)],
     });
-    return response.rows;
+
+    const product = response.rows[0];
+
+    if (!product) {
+      throw new Error("Produto não encontrado.");
+    }
+
+    const updateResponse = await tablesDB.updateRow({
+      databaseId: DATABASE_ID,
+      tableId: STOCKS_TABLE_ID,
+      rowId: product.$id,
+      data: { quantidade: newQuantity },
+    });
+
+    return updateResponse;
   } catch (error) {
-    console.error("Erro ao buscar produtos por periodo:", error);
+    console.error("Erro ao atualizar a quantidade do produto:", error);
     throw error;
   }
 };
@@ -77,7 +68,7 @@ export const addProduct = async ({
   try {
     const response = await tablesDB.createRow({
       databaseId: DATABASE_ID,
-      tableId: COLLECTION_ID_STOCK,
+      tableId: STOCKS_TABLE_ID,
       rowId: id.unique(),
       data: { nome: name, quantidade: quantity, categoria: type },
     });
@@ -88,41 +79,24 @@ export const addProduct = async ({
   }
 };
 
-export const updateProductQuantity = async ({
-  productName,
-  newQuantity,
-}: {
-  productName: string;
-  newQuantity: number;
-}) => {
+export const fetchProductsByPeriod = async (
+  period: "WEEKLY" | "MONTHLY" | "ANNUAL",
+): Promise<ProductByPeriod[]> => {
   try {
-    const response = await tablesDB.listRows<Product>({
+    const response = await tablesDB.listRows({
       databaseId: DATABASE_ID,
-      tableId: COLLECTION_ID_STOCK,
-      queries: [Query.equal("nome", productName)],
+      tableId: PRODUCTS_TABLE_ID,
+      queries: [Query.equal("periodo", period)],
     });
 
-    const product = response.rows[0];
-
-    if (!product) {
-      throw new Error("Product não encontrado.");
-    }
-
-    const updateResponse = await tablesDB.updateRow({
-      databaseId: DATABASE_ID,
-      tableId: COLLECTION_ID_STOCK,
-      rowId: product.$id,
-      data: { quantidade: newQuantity },
-    });
-
-    return updateResponse;
+    return response.rows as unknown as ProductByPeriod[];
   } catch (error) {
-    console.error("Erro ao atualizar a quantidade do produto:", error);
+    console.error("Erro ao buscar produtos por periodo:", error);
     throw error;
   }
 };
 
-export async function addSoldProduct({
+export const addSoldProduct = async ({
   productName,
   quantity,
   price,
@@ -134,44 +108,44 @@ export async function addSoldProduct({
   price: number;
   period: "Semanal" | "Mensal" | "Anual";
   goals: number;
-}) {
+}) => {
   try {
-    const { rows } = await tablesDB.listRows<ProductSale>({
+    const { rows } = await tablesDB.listRows({
       databaseId: DATABASE_ID,
-      tableId: COLLECTION_ID_PRODUCTS,
+      tableId: PRODUCTS_TABLE_ID,
       queries: [
-        Query.equal("nome", productName),
-        Query.equal("periodo", period),
+        Query.equal("name", productName),
+        Query.equal("period", period),
       ],
     });
 
-    const lucro = quantity * price;
+    const profit = quantity * price;
 
     if (rows.length === 0) {
       await tablesDB.createRow({
         databaseId: DATABASE_ID,
-        tableId: COLLECTION_ID_PRODUCTS,
+        tableId: PRODUCTS_TABLE_ID,
         rowId: id.unique(),
         data: {
-          nome: productName,
-          vendas: quantity,
-          lucro,
+          name: productName,
+          sales: quantity,
+          profit,
           period,
           goals,
         },
       });
     } else {
       const product = rows[0];
-      const novasVendas = (product.vendas ?? 0) + quantity;
-      const novoLucro = (product.lucro ?? 0) + lucro;
+      const newSales = (product.sales ?? 0) + quantity;
+      const newProfit = (product.profit ?? 0) + profit;
 
       await tablesDB.updateRow({
         databaseId: DATABASE_ID,
-        tableId: COLLECTION_ID_PRODUCTS,
+        tableId: PRODUCTS_TABLE_ID,
         rowId: product.$id,
         data: {
-          vendas: novasVendas,
-          lucro: novoLucro,
+          sales: newSales,
+          profit: newProfit,
         },
       });
     }
@@ -179,4 +153,4 @@ export async function addSoldProduct({
     console.error("Erro ao adicionar produto vendido:", error);
     throw error;
   }
-}
+};

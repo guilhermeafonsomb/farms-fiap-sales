@@ -1,64 +1,65 @@
 import { http, HttpResponse } from "msw";
 import {
-  COLLECTION_ID_PRODUCTS,
-  COLLECTION_ID_STOCK,
+  APPWRITE_ENDPOINT,
+  PRODUCTS_TABLE_ID,
+  STOCKS_TABLE_ID,
   DATABASE_ID,
 } from "../appwrite";
 
 const mockStockProducts = [
   {
     $id: "1",
-    nome: "Produto 1",
-    quantidade: 100,
-    categoria: "Tipo A",
+    name: "Produto 1",
+    quantity: 100,
+    type: "Tipo A",
   },
   {
     $id: "2",
-    nome: "Produto 2",
-    quantidade: 50,
-    categoria: "Tipo B",
+    name: "Produto 2",
+    quantity: 50,
+    type: "Tipo B",
   },
   {
     $id: "3",
-    nome: "Produto 3",
-    quantidade: 75,
-    categoria: "Tipo A",
+    name: "Produto 3",
+    quantity: 75,
+    type: "Tipo A",
   },
   {
     $id: "4",
-    nome: "Produto 4",
-    quantidade: 30,
-    categoria: "Tipo C",
+    name: "Produto 4",
+    quantity: 30,
+    type: "Tipo C",
   },
   {
     $id: "5",
-    nome: "Produto 5",
-    quantidade: 120,
-    categoria: "Tipo B",
+    name: "Produto 5",
+    quantity: 120,
+    type: "Tipo B",
   },
 ];
 
 const mockProductsByPeriod = [
   {
     $id: "p2",
-    nome: "Produto B",
-    lucro: 2000,
-    vendas: 100,
-    periodo: "Semanal",
+    name: "Produto B",
+    profit: 2000,
+    sales: 100,
+    period: "WEEKLY",
   },
   {
     $id: "p3",
-    nome: "Produto C",
-    lucro: 5000,
-    vendas: 200,
-    periodo: "Mensal",
+    name: "Produto C",
+    profit: 5000,
+    sales: 200,
+    period: "MONTHLY",
   },
   {
     $id: "p4",
-    nome: "Produto D",
-    lucro: 10000,
-    vendas: 500,
-    periodo: "Anual",
+    name: "Produto D",
+    profit: 10000,
+    sales: 500,
+    period: "ANNUAL",
   },
 ];
 
@@ -75,15 +76,15 @@ interface QueryParam {
 
 export const handlers = [
   http.get(
-    `https://nyc.cloud.appwrite.io/v1/tablesdb/${DATABASE_ID}/tables/${COLLECTION_ID_STOCK}/rows`,
+    `${APPWRITE_ENDPOINT}/tablesdb/${DATABASE_ID}/tables/${STOCKS_TABLE_ID}/rows`,
     ({ request }) => {
       const url = new URL(request.url);
       const queries = url.searchParams.get("queries");
 
-      if (queries?.includes("nome")) {
+      if (queries?.includes("name")) {
         const parsedQueries = JSON.parse(queries) as QueryParam[];
         const productName = parsedQueries[0].values[0];
-        const product = mockStockProducts.find((p) => p.nome === productName);
+        const product = mockStockProducts.find((p) => p.name === productName);
 
         return HttpResponse.json({
           rows: product ? [product] : [],
@@ -95,25 +96,23 @@ export const handlers = [
         rows: mockStockProducts,
         total: mockStockProducts.length,
       });
-    }
+    },
   ),
 
   http.get(
-    `https://nyc.cloud.appwrite.io/v1/tablesdb/${DATABASE_ID}/tables/${COLLECTION_ID_PRODUCTS}/rows`,
+    `${APPWRITE_ENDPOINT}/tablesdb/${DATABASE_ID}/tables/${PRODUCTS_TABLE_ID}/rows`,
     ({ request }) => {
       const url = new URL(request.url);
       const queries = url.searchParams.get("queries");
 
       if (queries) {
         const parsedQueries = JSON.parse(queries) as QueryParam[];
-        const periodQuery = parsedQueries.find(
-          (q) => q.attribute === "periodo"
-        );
+        const periodQuery = parsedQueries.find((q) => q.attribute === "period");
 
         if (periodQuery) {
           const period = periodQuery.values[0];
           const filtered = mockProductsByPeriod.filter(
-            (p) => p.periodo === period
+            (p) => p.period === period,
           );
 
           return HttpResponse.json({
@@ -127,11 +126,11 @@ export const handlers = [
         rows: mockProductsByPeriod,
         total: mockProductsByPeriod.length,
       });
-    }
+    },
   ),
 
   http.post(
-    `https://nyc.cloud.appwrite.io/v1/tablesdb/${DATABASE_ID}/tables/${COLLECTION_ID_STOCK}/rows`,
+    `${APPWRITE_ENDPOINT}/tablesdb/${DATABASE_ID}/tables/${STOCKS_TABLE_ID}/rows`,
     async ({ request }) => {
       const body = (await request.json()) as {
         data: Record<string, unknown>;
@@ -141,11 +140,11 @@ export const handlers = [
         $id: "new-product-id",
         ...body.data,
       });
-    }
+    },
   ),
 
   http.patch(
-    `https://nyc.cloud.appwrite.io/v1/tablesdb/${DATABASE_ID}/tables/${COLLECTION_ID_STOCK}/rows/:rowId`,
+    `${APPWRITE_ENDPOINT}/tablesdb/${DATABASE_ID}/tables/${STOCKS_TABLE_ID}/rows/:rowId`,
     async ({ request, params }) => {
       const body = (await request.json()) as {
         data: Record<string, unknown>;
@@ -156,11 +155,11 @@ export const handlers = [
         $id: rowId,
         ...body.data,
       });
-    }
+    },
   ),
 
   http.post(
-    `https://nyc.cloud.appwrite.io/v1/tablesdb/${DATABASE_ID}/tables/${COLLECTION_ID_PRODUCTS}/rows`,
+    `${APPWRITE_ENDPOINT}/tablesdb/${DATABASE_ID}/tables/${PRODUCTS_TABLE_ID}/rows`,
     async ({ request }) => {
       const body = (await request.json()) as {
         data: Record<string, unknown>;
@@ -170,11 +169,11 @@ export const handlers = [
         $id: "new-sale-id",
         ...body.data,
       });
-    }
+    },
   ),
 
   http.patch(
-    `https://nyc.cloud.appwrite.io/v1/tablesdb/${DATABASE_ID}/tables/${COLLECTION_ID_PRODUCTS}/rows/:rowId`,
+    `${APPWRITE_ENDPOINT}/tablesdb/${DATABASE_ID}/tables/${PRODUCTS_TABLE_ID}/rows/:rowId`,
     async ({ request, params }) => {
       const body = (await request.json()) as {
         data: Record<string, unknown>;
@@ -185,6 +184,6 @@ export const handlers = [
         $id: rowId,
         ...body.data,
       });
-    }
+    },
   ),
 ];
