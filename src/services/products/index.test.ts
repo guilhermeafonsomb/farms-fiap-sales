@@ -67,8 +67,8 @@ describe("Service product tests", () => {
   it("should add a product", async () => {
     const product = await addProduct(mockAddProductBody);
 
-    expect(product).toHaveProperty("nome");
-    expect(product.nome).toBe("Produto 6");
+    expect(product).toHaveProperty("name");
+    expect(product.name).toBe("Produto 6");
   });
 
   it("should return error when adding a product fails", async () => {
@@ -97,8 +97,8 @@ describe("Service product tests", () => {
       newQuantity: 10,
     });
 
-    expect(product).toHaveProperty("quantidade");
-    expect(product.quantidade).toBe(10);
+    expect(product).toHaveProperty("quantity");
+    expect(product.quantity).toBe(10);
   });
 
   it("should return error when updating a product fails", async () => {
