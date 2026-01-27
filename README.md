@@ -1,8 +1,8 @@
 # React + TypeScript + Vite + Microfront
 
-[![CI](https://github.com/guilhermeafonsomb/farms-fiap-host/actions/workflows/ci.yml/badge.svg)](https://github.com/guilhermeafonsomb/farms-fiap-host/actions/workflows/ci.yml)
+[![CI](https://github.com/guilhermeafonsomb/farms-fiap-sales/actions/workflows/ci.yml/badge.svg)](https://github.com/guilhermeafonsomb/farms-fiap-sales/actions/workflows/ci.yml)
 
-[![codecov](https://codecov.io/gh/guilhermeafonsomb/farms-fiap-host/branch/main/graph/badge.svg)](https://codecov.io/gh/guilhermeafonsomb/farms-fiap-host)
+[![codecov](https://codecov.io/gh/guilhermeafonsomb/farms-fiap-sales/branch/main/graph/badge.svg)](https://codecov.io/gh/guilhermeafonsomb/farms-fiap-sales)
 
 This is a micro-frontend project. Need run all micro-frontends and host project to see all experience
 

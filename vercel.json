@@ -14,12 +14,12 @@
   "framework": "vite",
   "rewrites": [
     {
-      "source": "/assets/(.*)",
-      "destination": "/assets/$1"
+      "source": "/sales-assets/(.*)",
+      "destination": "/sales-assets/$1"
     },
     {
       "source": "/remoteEntry.js",
-      "destination": "/assets/remoteEntry.js"
+      "destination": "/sales-assets/remoteEntry.js"
     },
     {
       "source": "/(.*)",
@@ -45,7 +45,7 @@
       ]
     },
     {
-      "source": "/assets/(.*)",
+      "source": "/sales-assets/(.*)",
       "headers": [
         {
           "key": "Cache-Control",
