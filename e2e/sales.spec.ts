@@ -20,9 +20,9 @@ test.describe("E2E Tests - Critical Business Flows", () => {
         const postData = request.postDataJSON();
         const newProduct = {
           $id: `product-${Date.now()}`,
-          nome: postData.data.nome,
-          quantidade: postData.data.quantidade,
-          categoria: postData.data.categoria,
+          name: postData.data.name,
+          quantity: postData.data.quantity,
+          type: postData.data.type,
         };
         mockStock.push(newProduct);
         await route.fulfill({
