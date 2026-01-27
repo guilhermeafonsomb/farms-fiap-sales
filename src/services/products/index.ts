@@ -1,4 +1,3 @@
-import { Query } from "appwrite";
 import {
   STOCKS_TABLE_ID,
   PRODUCTS_TABLE_ID,
@@ -7,6 +6,7 @@ import {
   tablesDB,
 } from "@/lib/appwrite";
 import type { Product, ProductByPeriod } from "@/model/products";
+import { Query } from "appwrite";
 
 export const fetchProducts = async (): Promise<Product[]> => {
   try {
@@ -30,11 +30,9 @@ export const updateProductQuantity = async ({
   newQuantity: number;
 }) => {
   try {
-    const response = await tablesDB.listRows({
-      databaseId: DATABASE_ID,
-      tableId: STOCKS_TABLE_ID,
-      queries: [Query.equal("name", productName)],
-    });
+    const response = await tablesDB.listRows(DATABASE_ID, STOCKS_TABLE_ID, [
+      Query.equal("name", productName),
+    ]);
 
     const product = response.rows[0];
 
@@ -42,12 +40,12 @@ export const updateProductQuantity = async ({
       throw new Error("Produto não encontrado.");
     }
 
-    const updateResponse = await tablesDB.updateRow({
-      databaseId: DATABASE_ID,
-      tableId: STOCKS_TABLE_ID,
-      rowId: product.$id,
-      data: { quantidade: newQuantity },
-    });
+    const updateResponse = await tablesDB.updateRow(
+      DATABASE_ID,
+      STOCKS_TABLE_ID,
+      product.$id,
+      { quantity: newQuantity },
+    );
 
     return updateResponse;
   } catch (error) {
@@ -66,12 +64,12 @@ export const addProduct = async ({
   type: string;
 }) => {
   try {
-    const response = await tablesDB.createRow({
-      databaseId: DATABASE_ID,
-      tableId: STOCKS_TABLE_ID,
-      rowId: id.unique(),
-      data: { nome: name, quantidade: quantity, categoria: type },
-    });
+    const response = await tablesDB.createRow(
+      DATABASE_ID,
+      STOCKS_TABLE_ID,
+      id.unique(),
+      { name, quantity, type },
+    );
     return response;
   } catch (error) {
     console.error("Erro ao criar product:", error);
@@ -83,11 +81,9 @@ export const fetchProductsByPeriod = async (
   period: "WEEKLY" | "MONTHLY" | "ANNUAL",
 ): Promise<ProductByPeriod[]> => {
   try {
-    const response = await tablesDB.listRows({
-      databaseId: DATABASE_ID,
-      tableId: PRODUCTS_TABLE_ID,
-      queries: [Query.equal("periodo", period)],
-    });
+    const response = await tablesDB.listRows(DATABASE_ID, PRODUCTS_TABLE_ID, [
+      Query.equal("period", period),
+    ]);
 
     return response.rows as unknown as ProductByPeriod[];
   } catch (error) {
@@ -106,47 +102,40 @@ export const addSoldProduct = async ({
   productName: string;
   quantity: number;
   price: number;
-  period: "Semanal" | "Mensal" | "Anual";
+  period: "WEEKLY" | "MONTHLY" | "ANNUAL";
   goals: number;
 }) => {
+  console.log('here')
   try {
-    const { rows } = await tablesDB.listRows({
-      databaseId: DATABASE_ID,
-      tableId: PRODUCTS_TABLE_ID,
-      queries: [
-        Query.equal("name", productName),
-        Query.equal("period", period),
-      ],
-    });
+    const { rows } = await tablesDB.listRows(DATABASE_ID, PRODUCTS_TABLE_ID, [
+      Query.equal("name", productName),
+      Query.equal("period", period),
+    ]);
 
     const profit = quantity * price;
 
     if (rows.length === 0) {
-      await tablesDB.createRow({
-        databaseId: DATABASE_ID,
-        tableId: PRODUCTS_TABLE_ID,
-        rowId: id.unique(),
-        data: {
-          name: productName,
-          sales: quantity,
-          profit,
-          period,
-          goals,
-        },
+      await tablesDB.createRow(DATABASE_ID, PRODUCTS_TABLE_ID, id.unique(), {
+        name: productName,
+        sales: quantity,
+        quantity,
+        price,
+        profit,
+        period,
+        goals,
       });
     } else {
       const product = rows[0];
       const newSales = (product.sales ?? 0) + quantity;
       const newProfit = (product.profit ?? 0) + profit;
 
-      await tablesDB.updateRow({
-        databaseId: DATABASE_ID,
-        tableId: PRODUCTS_TABLE_ID,
-        rowId: product.$id,
-        data: {
-          sales: newSales,
-          profit: newProfit,
-        },
+      await tablesDB.updateRow(DATABASE_ID, PRODUCTS_TABLE_ID, product.$id, {
+        sales: newSales,
+        profit: newProfit,
+        price,
+        goals,
+        quantity,
+        period,
       });
     }
   } catch (error) {
