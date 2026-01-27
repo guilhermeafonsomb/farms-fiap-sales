@@ -1,52 +1,54 @@
 import { test, expect } from "@playwright/test";
 
-test.describe("E2E Tests - Critical Business Flows", () => {
-  test.beforeEach(async ({ page }) => {
-    const mockStock: any[] = [];
-    const mockProducts: any[] = [];
+// Global beforeEach to setup API mocking for all tests
+test.beforeEach(async ({ page }) => {
+  const mockStock: any[] = [];
+  const mockProducts: any[] = [];
 
-    await page.route("**/nyc.cloud.appwrite.io/**", async (route) => {
-      const request = route.request();
-      const url = request.url();
-      const method = request.method();
+  await page.route("**/nyc.cloud.appwrite.io/**", async (route) => {
+    const request = route.request();
+    const url = request.url();
+    const method = request.method();
 
-      if (method === "GET" && url.includes("estoque")) {
-        await route.fulfill({
-          status: 200,
-          contentType: "application/json",
-          body: JSON.stringify({ rows: mockStock, sum: mockStock.length }),
-        });
-      } else if (method === "POST" && url.includes("estoque")) {
-        const postData = request.postDataJSON();
-        const newProduct = {
-          $id: `product-${Date.now()}`,
-          name: postData.data.name,
-          quantity: postData.data.quantity,
-          type: postData.data.type,
-        };
-        mockStock.push(newProduct);
-        await route.fulfill({
-          status: 200,
-          contentType: "application/json",
-          body: JSON.stringify(newProduct),
-        });
-      } else if (method === "GET" && url.includes("produtos")) {
-        await route.fulfill({
-          status: 200,
-          contentType: "application/json",
-          body: JSON.stringify({
-            rows: mockProducts,
-            sum: mockProducts.length,
-          }),
-        });
-      } else {
-        await route.continue();
-      }
-    });
-
-    await page.goto("/");
-    await page.waitForLoadState("networkidle");
+    if (method === "GET" && url.includes("estoque")) {
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({ rows: mockStock, sum: mockStock.length }),
+      });
+    } else if (method === "POST" && url.includes("estoque")) {
+      const postData = request.postDataJSON();
+      const newProduct = {
+        $id: `product-${Date.now()}`,
+        name: postData.data.name,
+        quantity: postData.data.quantity,
+        type: postData.data.type,
+      };
+      mockStock.push(newProduct);
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify(newProduct),
+      });
+    } else if (method === "GET" && url.includes("produtos")) {
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({
+          rows: mockProducts,
+          sum: mockProducts.length,
+        }),
+      });
+    } else {
+      await route.continue();
+    }
   });
+
+  await page.goto("/");
+  await page.waitForLoadState("networkidle");
+});
+
+test.describe("E2E Tests - Critical Business Flows", () => {
 
   test("Should display page structure correctly", async ({ page }) => {
     await expect(page.getByText("Estoque e Vendas")).toBeVisible();
@@ -110,12 +112,11 @@ test.describe("E2E Tests - Critical Business Flows", () => {
 
 test.describe("Cross-Browser Compatibility", () => {
   test("Should work on different viewports", async ({ page }) => {
+    // Test desktop viewport (already loaded by global beforeEach)
     await page.setViewportSize({ width: 1920, height: 1080 });
-    await page.goto("/");
-    await page.waitForLoadState("networkidle");
-
     await expect(page.getByText("Estoque e Vendas")).toBeVisible();
 
+    // Test mobile viewport
     await page.setViewportSize({ width: 375, height: 667 });
     await expect(page.getByText("Estoque e Vendas")).toBeVisible();
   });
