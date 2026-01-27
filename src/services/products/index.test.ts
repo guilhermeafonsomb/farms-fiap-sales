@@ -154,7 +154,7 @@ describe("Service product tests", () => {
         productName: "Product 1",
         quantity: 10,
         price: 10,
-        period: "Semanal",
+        period: "WEEKLY",
         goals: 10,
       }),
     ).resolves.not.toThrow();
@@ -191,7 +191,7 @@ describe("Service product tests", () => {
         productName: "Product 1",
         quantity: 10,
         price: 10,
-        period: "Semanal",
+        period: "WEEKLY",
         goals: 10,
       }),
     ).rejects.toThrow();
