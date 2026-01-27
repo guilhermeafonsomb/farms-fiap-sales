@@ -20,74 +20,72 @@ describe("Service product tests", () => {
   it("should return error when fetching products fails", async () => {
     const { server } = await import("@/lib/mocks/server");
     const { http, HttpResponse } = await import("msw");
-    const { DATABASE_ID, COLLECTION_ID_STOCK } = await import("@/lib/appwrite");
+    const { DATABASE_ID, STOCKS_TABLE_ID } = await import("@/lib/appwrite");
 
     server.use(
       http.get(
-        `https://nyc.cloud.appwrite.io/v1/tablesdb/${DATABASE_ID}/tables/${COLLECTION_ID_STOCK}/rows`,
+        `https://nyc.cloud.appwrite.io/v1/tablesdb/${DATABASE_ID}/tables/${STOCKS_TABLE_ID}/rows`,
         () => {
           return HttpResponse.json(
             { message: "Internal Server Error" },
-            { status: 500 }
+            { status: 500 },
           );
-        }
-      )
+        },
+      ),
     );
 
     await expect(fetchProducts()).rejects.toThrow();
   });
 
   it("should fetch products by period", async () => {
-    const product = await fetchProductsByPeriod("Semanal");
+    const product = await fetchProductsByPeriod("WEEKLY");
 
-    expect(product[0]).toHaveProperty("nome");
-    expect(product[0].nome).toBe("Produto B");
+    expect(product[0]).toHaveProperty("name");
+    expect(product[0].name).toBe("Produto B");
   });
 
   it("should return error when fetching products by period fails", async () => {
     const { server } = await import("@/lib/mocks/server");
     const { http, HttpResponse } = await import("msw");
-    const { DATABASE_ID, COLLECTION_ID_PRODUCTS } = await import(
-      "@/lib/appwrite"
-    );
+    const { DATABASE_ID, PRODUCTS_TABLE_ID } = await import("@/lib/appwrite");
 
     server.use(
       http.get(
-        `https://nyc.cloud.appwrite.io/v1/tablesdb/${DATABASE_ID}/tables/${COLLECTION_ID_PRODUCTS}/rows`,
+        `https://nyc.cloud.appwrite.io/v1/tablesdb/${DATABASE_ID}/tables/${PRODUCTS_TABLE_ID}/rows`,
         () => {
           return HttpResponse.json(
             { message: "Internal Server Error" },
-            { status: 500 }
+            { status: 500 },
           );
-        }
-      )
+        },
+      ),
     );
 
-    await expect(fetchProductsByPeriod("Semanal")).rejects.toThrow();
+    await expect(fetchProductsByPeriod("WEEKLY")).rejects.toThrow();
   });
 
   it("should add a product", async () => {
     const product = await addProduct(mockAddProductBody);
 
-    expect(product).toHaveProperty("nome");
-    expect(product.nome).toBe("Produto 6");
+    expect(product).toHaveProperty("name");
+    expect(product.name).toBe("Produto 6");
   });
 
   it("should return error when adding a product fails", async () => {
     const { server } = await import("@/lib/mocks/server");
     const { http, HttpResponse } = await import("msw");
-    const { DATABASE_ID, COLLECTION_ID_STOCK } = await import("@/lib/appwrite");
+    const { DATABASE_ID, STOCKS_TABLE_ID } = await import("@/lib/appwrite");
 
     server.use(
       http.post(
-        `https://nyc.cloud.appwrite.io/v1/tablesdb/${DATABASE_ID}/tables/${COLLECTION_ID_STOCK}/rows`,
+        `https://nyc.cloud.appwrite.io/v1/tablesdb/${DATABASE_ID}/tables/${STOCKS_TABLE_ID}/rows`,
         () => {
           return HttpResponse.json(
             { message: "Internal Server Error" },
-            { status: 500 }
+            { status: 500 },
           );
-        }
-      )
+        },
+      ),
     );
 
     await expect(addProduct(mockAddProductBody)).rejects.toThrow();
@@ -99,55 +97,55 @@ describe("Service product tests", () => {
       newQuantity: 10,
     });
 
-    expect(product).toHaveProperty("quantidade");
-    expect(product.quantidade).toBe(10);
+    expect(product).toHaveProperty("quantity");
+    expect(product.quantity).toBe(10);
   });
 
   it("should return error when updating a product fails", async () => {
     const { server } = await import("@/lib/mocks/server");
     const { http, HttpResponse } = await import("msw");
-    const { DATABASE_ID, COLLECTION_ID_STOCK } = await import("@/lib/appwrite");
+    const { DATABASE_ID, STOCKS_TABLE_ID } = await import("@/lib/appwrite");
 
     server.use(
       http.patch(
-        `https://nyc.cloud.appwrite.io/v1/tablesdb/${DATABASE_ID}/tables/${COLLECTION_ID_STOCK}/rows/:rowId`,
+        `https://nyc.cloud.appwrite.io/v1/tablesdb/${DATABASE_ID}/tables/${STOCKS_TABLE_ID}/rows/:rowId`,
         () => {
           return HttpResponse.json(
             { message: "Internal Server Error" },
-            { status: 500 }
+            { status: 500 },
           );
-        }
-      )
+        },
+      ),
     );
 
     await expect(
-      updateProductQuantity({ productName: "Product 1", newQuantity: 10 })
+      updateProductQuantity({ productName: "Product 1", newQuantity: 10 }),
     ).rejects.toThrow();
   });
 
   it("should throw error when product is not found during update", async () => {
     const { server } = await import("@/lib/mocks/server");
     const { http, HttpResponse } = await import("msw");
-    const { DATABASE_ID, COLLECTION_ID_STOCK } = await import("@/lib/appwrite");
+    const { DATABASE_ID, STOCKS_TABLE_ID } = await import("@/lib/appwrite");
 
     server.use(
       http.get(
-        `https://nyc.cloud.appwrite.io/v1/tablesdb/${DATABASE_ID}/tables/${COLLECTION_ID_STOCK}/rows`,
+        `https://nyc.cloud.appwrite.io/v1/tablesdb/${DATABASE_ID}/tables/${STOCKS_TABLE_ID}/rows`,
         () => {
           return HttpResponse.json({
             rows: [],
             total: 0,
           });
-        }
-      )
+        },
+      ),
     );
 
     await expect(
       updateProductQuantity({
-        productName: "Product Inexistente",
+        productName: "Produto Inexistente",
         newQuantity: 10,
-      })
-    ).rejects.toThrow("Product não encontrado.");
+      }),
+    ).rejects.toThrow("Produto não encontrado.");
   });
 
   it("should add sold product", async () => {
@@ -156,38 +154,36 @@ describe("Service product tests", () => {
         productName: "Product 1",
         quantity: 10,
         price: 10,
-        period: "Semanal",
+        period: "WEEKLY",
         goals: 10,
-      })
+      }),
     ).resolves.not.toThrow();
   });
 
   it("should throw error when add sold product fails", async () => {
     const { server } = await import("@/lib/mocks/server");
     const { http, HttpResponse } = await import("msw");
-    const { DATABASE_ID, COLLECTION_ID_PRODUCTS } = await import(
-      "@/lib/appwrite"
-    );
+    const { DATABASE_ID, PRODUCTS_TABLE_ID } = await import("@/lib/appwrite");
 
     server.use(
       http.get(
-        `https://nyc.cloud.appwrite.io/v1/tablesdb/${DATABASE_ID}/tables/${COLLECTION_ID_PRODUCTS}/rows`,
+        `https://nyc.cloud.appwrite.io/v1/tablesdb/${DATABASE_ID}/tables/${PRODUCTS_TABLE_ID}/rows`,
         () => {
           return HttpResponse.json({
             rows: [],
             total: 0,
           });
-        }
+        },
       ),
       http.post(
-        `https://nyc.cloud.appwrite.io/v1/tablesdb/${DATABASE_ID}/tables/${COLLECTION_ID_PRODUCTS}/rows`,
+        `https://nyc.cloud.appwrite.io/v1/tablesdb/${DATABASE_ID}/tables/${PRODUCTS_TABLE_ID}/rows`,
         () => {
           return HttpResponse.json(
             { message: "Internal Server Error" },
-            { status: 500 }
+            { status: 500 },
           );
-        }
-      )
+        },
+      ),
     );
 
     await expect(
@@ -195,9 +191,9 @@ describe("Service product tests", () => {
         productName: "Product 1",
         quantity: 10,
         price: 10,
-        period: "Semanal",
+        period: "WEEKLY",
         goals: 10,
-      })
+      }),
     ).rejects.toThrow();
   });
 });

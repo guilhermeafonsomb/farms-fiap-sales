@@ -8,7 +8,7 @@ export type Sale = {
   product: string;
   quantity: number;
   price: number;
-  period: "Semanal" | "Mensal" | "Anual";
+  period: "WEEKLY" | "MONTHLY" | "ANNUAL";
   goals: number;
 };
 
@@ -20,10 +20,10 @@ export const RegisterSale: React.FC<RegisterSaleProps> = ({ onRegister }) => {
   const [product, setProduct] = useState("");
   const [quantity, setQuantity] = useState("");
   const [price, setPrice] = useState("");
-  const [period, setPeriod] = useState<"Semanal" | "Mensal" | "Anual">(
-    "Semanal"
+  const [period, setPeriod] = useState<"WEEKLY" | "MONTHLY" | "ANNUAL">(
+    "WEEKLY"
   );
-  const [goals, setGoals] = useState(""); // Changed to string to handle empty input
+  const [goals, setGoals] = useState(""); 
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const validate = () => {
@@ -54,7 +54,7 @@ export const RegisterSale: React.FC<RegisterSaleProps> = ({ onRegister }) => {
     setProduct("");
     setQuantity("");
     setPrice("");
-    setPeriod("Semanal");
+    setPeriod("WEEKLY");
     setGoals("");
     setErrors({});
   };
@@ -144,13 +144,13 @@ export const RegisterSale: React.FC<RegisterSaleProps> = ({ onRegister }) => {
           value={period}
           data-testid="period-select"
           onChange={(value) =>
-            setPeriod(value.target.value as "Semanal" | "Mensal" | "Anual")
+            setPeriod(value.target.value as "WEEKLY" | "MONTHLY" | "ANNUAL")
           }
           aria-required="true"
         >
-          <option label="Semanal" value="Semanal" />
-          <option label="Mensal" value="Mensal" />
-          <option label="Anual" value="Anual" />
+          <option label="Semanal" value="WEEKLY" />
+          <option label="Mensal" value="MONTHLY" />
+          <option label="Anual" value="ANNUAL" />
         </select>
 
         <label htmlFor="goals" className="sr-only">

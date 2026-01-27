@@ -3,7 +3,7 @@ import { render, fireEvent, waitFor } from "@/test/test-utils";
 import { Sales } from ".";
 import * as useProductsHook from "@/hooks/useProducts";
 import * as useAddProductHook from "@/hooks/useAddProducts";
-import * as produtosService from "@/services/products";
+import * as productsService from "@/services/products";
 import { QueryClient } from "@tanstack/react-query";
 
 vi.mock("@/hooks/useProducts");
@@ -139,7 +139,7 @@ describe("Sales Page Integration Tests", () => {
   describe("Update Stock Integration", () => {
     it("should update stock successfully", async () => {
       const { toast } = await import("react-toastify");
-      vi.spyOn(produtosService, "updateProductQuantity").mockResolvedValue(
+      vi.spyOn(productsService, "updateProductQuantity").mockResolvedValue(
         {} as any
       );
 
@@ -157,7 +157,7 @@ describe("Sales Page Integration Tests", () => {
       fireEvent.click(updateButton);
 
       await waitFor(() => {
-        expect(produtosService.updateProductQuantity).toHaveBeenCalledWith({
+        expect(productsService.updateProductQuantity).toHaveBeenCalledWith({
           productName: "Produto A",
           newQuantity: 110,
         });
@@ -190,7 +190,7 @@ describe("Sales Page Integration Tests", () => {
 
     it("should show error when update fails", async () => {
       const { toast } = await import("react-toastify");
-      vi.spyOn(produtosService, "updateProductQuantity").mockRejectedValue(
+      vi.spyOn(productsService, "updateProductQuantity").mockRejectedValue(
         new Error("Failed")
       );
 
@@ -218,10 +218,10 @@ describe("Sales Page Integration Tests", () => {
   describe("Register Sale Integration", () => {
     it("should register sale successfully", async () => {
       const { toast } = await import("react-toastify");
-      vi.spyOn(produtosService, "addSoldProduct").mockResolvedValue(
+      vi.spyOn(productsService, "addSoldProduct").mockResolvedValue(
         undefined as any
       );
-      vi.spyOn(produtosService, "updateProductQuantity").mockResolvedValue(
+      vi.spyOn(productsService, "updateProductQuantity").mockResolvedValue(
         {} as any
       );
 
@@ -238,21 +238,21 @@ describe("Sales Page Integration Tests", () => {
       fireEvent.change(productInput, { target: { value: "Produto A" } });
       fireEvent.change(quantityInput, { target: { value: "5" } });
       fireEvent.change(priceInput, { target: { value: "100" } });
-      fireEvent.change(periodSelect, { target: { value: "Mensal" } });
+      fireEvent.change(periodSelect, { target: { value: "MONTHLY" } });
       fireEvent.change(goalsInput, { target: { value: "1000" } });
 
       const registerButton = getAllByText("Registrar Venda")[1];
       fireEvent.click(registerButton);
 
       await waitFor(() => {
-        expect(produtosService.addSoldProduct).toHaveBeenCalledWith({
+        expect(productsService.addSoldProduct).toHaveBeenCalledWith({
           productName: "Produto A",
           quantity: 5,
           price: 100,
-          period: "Mensal",
+          period: "MONTHLY",
           goals: 1000,
         });
-        expect(produtosService.updateProductQuantity).toHaveBeenCalledWith({
+        expect(productsService.updateProductQuantity).toHaveBeenCalledWith({
           productName: "Produto A",
           newQuantity: 95,
         });
@@ -262,7 +262,7 @@ describe("Sales Page Integration Tests", () => {
 
     it("should show error when register sale fails", async () => {
       const { toast } = await import("react-toastify");
-      vi.spyOn(produtosService, "addSoldProduct").mockRejectedValue(
+      vi.spyOn(productsService, "addSoldProduct").mockRejectedValue(
         new Error("Failed")
       );
 
@@ -279,7 +279,7 @@ describe("Sales Page Integration Tests", () => {
       fireEvent.change(productInput, { target: { value: "Produto A" } });
       fireEvent.change(quantityInput, { target: { value: "5" } });
       fireEvent.change(priceInput, { target: { value: "100" } });
-      fireEvent.change(periodSelect, { target: { value: "Semanal" } });
+      fireEvent.change(periodSelect, { target: { value: "WEEKLY" } });
       fireEvent.change(goalsInput, { target: { value: "500" } });
 
       const registerButton = getAllByText("Registrar Venda")[1];

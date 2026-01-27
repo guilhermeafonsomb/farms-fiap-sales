@@ -110,7 +110,7 @@ describe("RegisterSale", () => {
       product: "Tomate",
       quantity: 100,
       price: 5,
-      period: "Semanal",
+      period: "WEEKLY",
       goals: 1000,
     });
 
