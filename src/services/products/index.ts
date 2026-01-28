@@ -105,7 +105,6 @@ export const addSoldProduct = async ({
   period: "WEEKLY" | "MONTHLY" | "ANNUAL";
   goals: number;
 }) => {
-  console.log('here')
   try {
     const { rows } = await tablesDB.listRows(DATABASE_ID, PRODUCTS_TABLE_ID, [
       Query.equal("name", productName),
