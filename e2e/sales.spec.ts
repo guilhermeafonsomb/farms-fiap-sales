@@ -1,6 +1,5 @@
 import { test, expect } from "@playwright/test";
 
-// Global beforeEach to setup API mocking for all tests
 test.beforeEach(async ({ page }) => {
   const mockStock: any[] = [];
   const mockProducts: any[] = [];
@@ -112,11 +111,9 @@ test.describe("E2E Tests - Critical Business Flows", () => {
 
 test.describe("Cross-Browser Compatibility", () => {
   test("Should work on different viewports", async ({ page }) => {
-    // Test desktop viewport (already loaded by global beforeEach)
     await page.setViewportSize({ width: 1920, height: 1080 });
     await expect(page.getByText("Estoque e Vendas")).toBeVisible();
 
-    // Test mobile viewport
     await page.setViewportSize({ width: 375, height: 667 });
     await expect(page.getByText("Estoque e Vendas")).toBeVisible();
   });
