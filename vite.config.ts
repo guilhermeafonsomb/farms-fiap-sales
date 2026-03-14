@@ -37,11 +37,15 @@ export default defineConfig({
   optimizeDeps: {
     needsInterop: ["react", "@tanstack/react-query", "react-toastify"],
   },
+  experimental: {
+    renderBuiltUrl() {
+      return { relative: true };
+    },
+  },
   build: {
     target: "esnext",
     minify: false,
     cssCodeSplit: false,
-    assetsDir: "sales-assets",
   },
   server: {
     port: 5003,
