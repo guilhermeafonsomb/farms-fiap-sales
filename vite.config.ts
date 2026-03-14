@@ -22,7 +22,7 @@ const mfConfig = {
 };
 
 export default defineConfig({
-  base: process.env.VITE_PUBLIC_PATH || "/",
+  base: process.env.ZE_PUBLIC_PATH || "/",
   plugins: [
     react(),
     process.env.SKIP_ZEPHYR === "true"
@@ -46,6 +46,7 @@ export default defineConfig({
     target: "esnext",
     minify: false,
     cssCodeSplit: false,
+    assetsDir: "assets",
   },
   server: {
     port: 5003,
