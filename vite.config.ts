@@ -1,10 +1,10 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import { withZephyr } from "vite-plugin-zephyr";
+import { ModuleFederationOptions, withZephyr } from "vite-plugin-zephyr";
 import { federation } from "@module-federation/vite";
 import path from "path";
 
-const mfConfig = {
+const mfConfig: ModuleFederationOptions = {
   name: "sales-app",
   filename: "remoteEntry.js",
   exposes: {
