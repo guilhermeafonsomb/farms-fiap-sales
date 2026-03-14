@@ -17,10 +17,12 @@ const mfConfig = {
     "@tanstack/react-query": { singleton: true },
     "react-toastify": { singleton: true },
   },
+  manifest: true,
   dts: false,
 };
 
 export default defineConfig({
+  base: process.env.VITE_PUBLIC_PATH || "/",
   plugins: [
     react(),
     process.env.SKIP_ZEPHYR === "true"
