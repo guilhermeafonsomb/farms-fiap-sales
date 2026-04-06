@@ -37,6 +37,3 @@ coverage
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
-
-# Zephyr
-.__mf__temp

@@ -1,4 +1,3 @@
-import "./index.css";
 import { Sales } from "./pages/sales";
 
 function App() {
