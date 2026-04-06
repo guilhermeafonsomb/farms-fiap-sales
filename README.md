@@ -27,7 +27,7 @@ pnpm build
 ```
 
 ```
-npx serve dist -p 5003
+npx serve dist -p 5001
 ```
 
 run tests
@@ -43,3 +43,7 @@ pnpm test:e2e
 ## host project
 
 [host](https://github.com/guilhermeafonsomb/farms-fiap-host)
+
+## Site in Vercel
+
+[Farms Fiap](https://farms-fiap.vercel.app)

@@ -1,4 +1,3 @@
-/// <reference types="node" />
 import { defineConfig, devices } from "@playwright/test";
 
 export default defineConfig({
@@ -20,45 +19,36 @@ export default defineConfig({
     video: "retain-on-failure",
   },
 
-  projects: process.env.CI
-    ? [
-        {
-          name: "chromium",
-          use: { ...devices["Desktop Chrome"] },
-        },
-      ]
-    : [
-        {
-          name: "chromium",
-          use: { ...devices["Desktop Chrome"] },
-        },
+  projects: [
+    {
+      name: "chromium",
+      use: { ...devices["Desktop Chrome"] },
+    },
 
-        {
-          name: "firefox",
-          use: { ...devices["Desktop Firefox"] },
-        },
+    {
+      name: "firefox",
+      use: { ...devices["Desktop Firefox"] },
+    },
 
-        {
-          name: "webkit",
-          use: { ...devices["Desktop Safari"] },
-        },
+    {
+      name: "webkit",
+      use: { ...devices["Desktop Safari"] },
+    },
 
-        {
-          name: "Mobile Chrome",
-          use: { ...devices["Pixel 5"] },
-        },
-        {
-          name: "Mobile Safari",
-          use: { ...devices["iPhone 12"] },
-        },
-      ],
+    {
+      name: "Mobile Chrome",
+      use: { ...devices["Pixel 5"] },
+    },
+    {
+      name: "Mobile Safari",
+      use: { ...devices["iPhone 12"] },
+    },
+  ],
 
   webServer: {
-    command: process.env.CI
-      ? "npx serve dist -p 5003 -s"
-      : "pnpm dev",
+    command: "pnpm dev",
     url: "http://localhost:5003",
     reuseExistingServer: !process.env.CI,
-    timeout: 60 * 1000,
+    timeout: 120 * 1000,
   },
 });
